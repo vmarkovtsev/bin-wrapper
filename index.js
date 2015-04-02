@@ -10,6 +10,7 @@ var path = require('path');
 var status = require('download-status');
 var symlink = require('lnfs');
 var which = require('npm-installed');
+var fs = require('fs');
 
 /**
  * Initialize a new `BinWrapper`
@@ -196,7 +197,7 @@ BinWrapper.prototype.symlink = function (files, cb) {
 
 	files = files.filter(function (file) {
 		try {
-			return file !== which.sync(name);
+			return fs.realpathSync(file) !== fs.realpathSync(which.sync(name));
 		} catch (err) {
 			return true;
 		}
